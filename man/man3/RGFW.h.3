@@ -1,4 +1,4 @@
-.TH "RGFW.h" 3 "Wed Dec 24 2025" "RGFW" \" -*- nroff -*-
+.TH "RGFW.h" 3 "Sat Jan 3 2026" "RGFW" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -507,6 +507,10 @@ RGFW.h
 .br
 .RI "Scales a monitor’s mode to match a window’s size\&. "
 .ti -1c
+.RI "\fBRGFWDEF\fP void \fBRGFW_setRawMouseMode\fP (\fBRGFW_bool\fP state)"
+.br
+.RI "set (enable or disable) raw mouse mode globally "
+.ti -1c
 .RI "\fBRGFWDEF\fP void \fBRGFW_waitForEvent\fP (\fBi32\fP waitMS)"
 .br
 .RI "sleep until RGFW gets an event or the timer ends (defined by OS) "
@@ -522,6 +526,14 @@ RGFW.h
 .RI "\fBRGFWDEF\fP void \fBRGFW_stopCheckEvents\fP (void)"
 .br
 .RI "check all the events until there are none left and updates window structure attributes queues events if the queue is checked and/or requested "
+.ti -1c
+.RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_checkEvent\fP (\fBRGFW_event\fP *event)"
+.br
+.RI "polls and pops the next event "
+.ti -1c
+.RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_checkQueuedEvent\fP (\fBRGFW_event\fP *event)"
+.br
+.RI "pops the first queued event "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_isKeyPressed\fP (RGFW_key key)"
 .br
@@ -660,11 +672,11 @@ RGFW.h
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_window_checkEvent\fP (\fBRGFW_window\fP *win, \fBRGFW_event\fP *event)"
 .br
-.RI "polls and pops the next event from the window's event queue "
+.RI "polls and pops the next event with the matching target window in event queue, pushes back events that don't match "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_window_checkQueuedEvent\fP (\fBRGFW_window\fP *win, \fBRGFW_event\fP *event)"
 .br
-.RI "pops the first queued event for the window "
+.RI "pops the first queued event with the matching target window, pushes back events that don't match "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_window_isKeyPressed\fP (\fBRGFW_window\fP *win, RGFW_key key)"
 .br
@@ -836,7 +848,15 @@ RGFW.h
 .ti -1c
 .RI "\fBRGFWDEF\fP void \fBRGFW_window_setRawMouseMode\fP (\fBRGFW_window\fP *win, \fBRGFW_bool\fP state)"
 .br
-.RI "set (enable or disable) raw mouse mode, locking the cursor and using mouse raw input\&. "
+.RI "set (enable or disable) raw mouse mode only for the select window "
+.ti -1c
+.RI "\fBRGFWDEF\fP void \fBRGFW_window_captureMouse\fP (\fBRGFW_window\fP *win, \fBRGFW_bool\fP state)"
+.br
+.RI "lock/unlock the cursor\&. "
+.ti -1c
+.RI "\fBRGFWDEF\fP void \fBRGFW_window_captureRawMouse\fP (\fBRGFW_window\fP *win, \fBRGFW_bool\fP state)"
+.br
+.RI "lock/unlock the cursor and enable raw mpuise mode\&. "
 .ti -1c
 .RI "\fBRGFWDEF\fP void \fBRGFW_window_holdMouse\fP (\fBRGFW_window\fP *win)"
 .br
@@ -848,7 +868,11 @@ RGFW.h
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_window_isRawMouseMode\fP (\fBRGFW_window\fP *win)"
 .br
-.RI "Returns true if the mouse is currently held by RGFW\&. "
+.RI "Returns true if the mouse is using raw mouse mode\&. "
+.ti -1c
+.RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_window_isCaptured\fP (\fBRGFW_window\fP *win)"
+.br
+.RI "Returns true if the mouse is captured\&. "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_window_isHoldingMouse\fP (\fBRGFW_window\fP *win)"
 .br
@@ -1021,9 +1045,13 @@ RGFW.h
 .br
 .RI "Clears all events from the RGFW event queue without processing them\&. "
 .ti -1c
-.RI "\fBRGFWDEF\fP \fBRGFW_event\fP * \fBRGFW_eventQueuePop\fP (\fBRGFW_window\fP *win)"
+.RI "\fBRGFWDEF\fP \fBRGFW_event\fP * \fBRGFW_eventQueuePop\fP (void)"
 .br
-.RI "Pops the next event from the RGFW event queue for the specified window\&. "
+.RI "Pops the next event from the RGFW event queue\&. "
+.ti -1c
+.RI "\fBRGFWDEF\fP \fBRGFW_event\fP * \fBRGFW_window_eventQueuePop\fP (\fBRGFW_window\fP *win)"
+.br
+.RI "Pops the next event from the RGFW event queue that matches the target window, pushes back events that don't matchj\&. "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBu32\fP \fBRGFW_apiKeyToRGFW\fP (\fBu32\fP keycode)"
 .br
@@ -1317,6 +1345,40 @@ A pointer to the allocated memory block\&.
 .RE
 .PP
 
+.SS "\fBRGFWDEF\fP \fBRGFW_bool\fP RGFW_checkEvent (\fBRGFW_event\fP * event)"
+
+.PP
+polls and pops the next event ! 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP [OUTPUT] a pointer to store the retrieved event 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+RGFW_TRUE if an event was found, RGFW_FALSE otherwise
+.RE
+.PP
+NOTE: Using this function without a loop may cause event lag\&. For multi-threaded systems, use RGFW_pollEvents combined with RGFW_checkQueuedEvent\&.
+.PP
+Example: \fBRGFW_event\fP event; while (RGFW_checkEvent(win, &event)) { // handle event } 
+.SS "\fBRGFWDEF\fP \fBRGFW_bool\fP RGFW_checkQueuedEvent (\fBRGFW_event\fP * event)"
+
+.PP
+pops the first queued event ! 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP [OUTPUT] a pointer to store the retrieved event 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+RGFW_TRUE if an event was found, RGFW_FALSE otherwise 
+.RE
+.PP
+
 .SS "\fBRGFWDEF\fP void RGFW_copyImageData (\fBu8\fP * dest_data, \fBi32\fP w, \fBi32\fP h, RGFW_format dest_format, \fBu8\fP * src_data, RGFW_format src_format)"
 copy image to another image, respecting each image's format 
 .SS "\fBRGFWDEF\fP \fBRGFW_surface\fP * RGFW_createSurface (\fBu8\fP * data, \fBi32\fP w, \fBi32\fP h, RGFW_format format)"
@@ -1459,6 +1521,8 @@ the window is hidden
 < focus the window when it's shown
 .PP
 < if the window is in focus
+.PP
+< capture the mouse mouse mouse on window creation
 .PP
 < create an OpenGL context (you can also do this manually with RGFW_window_createContext_OpenGL)
 .PP
@@ -1761,6 +1825,17 @@ Set if events should be queued or not (enabled by default if the event queue is 
 \fBParameters\fP
 .RS 4
 \fIqueue\fP boolean value if RGFW should queue events or not 
+.RE
+.PP
+
+.SS "\fBRGFWDEF\fP void RGFW_setRawMouseMode (\fBRGFW_bool\fP state)"
+
+.PP
+set (enable or disable) raw mouse mode globally ! 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthe\fP boolean state of raw mouse mode 
 .RE
 .PP
 
