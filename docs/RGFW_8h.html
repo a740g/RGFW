@@ -115,8 +115,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRGFW__mouseDeltaEvent.html">RGFW_mouseDeltaEvent</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for any mouse scroll or raw motion event  <a href="structRGFW__mouseDeltaEvent.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRGFW__mousePosEvent.html">RGFW_mousePosEvent</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for a mouse position event (RGFW_mousePosChanged)  <a href="structRGFW__mousePosEvent.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRGFW__mouseMotionEvent.html">RGFW_mouseMotionEvent</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for a mouse position event (RGFW_mouseMotion)  <a href="structRGFW__mouseMotionEvent.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRGFW__keyEvent.html">RGFW_keyEvent</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for a key press/release event  <a href="structRGFW__keyEvent.html#details">More...</a><br /></td></tr>
@@ -183,8 +183,8 @@ Macros</h2></td></tr>
 <tr class="separator:acc464e9873ed8909bf14a15e13cbefa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49fc83ce8848e48e0895a123ab5707dd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#a49fc83ce8848e48e0895a123ab5707dd">RGFW_MAX_EVENTS</a>&#160;&#160;&#160;32</td></tr>
 <tr class="separator:a49fc83ce8848e48e0895a123ab5707dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3d151fddc5615b7e7e795ef2ede6595"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#af3d151fddc5615b7e7e795ef2ede6595">RGFW_MAX_MONITORS</a>&#160;&#160;&#160;6</td></tr>
-<tr class="separator:af3d151fddc5615b7e7e795ef2ede6595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa8f0aad9e8b520f290cb9f02077caaf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#afa8f0aad9e8b520f290cb9f02077caaf">RGFW_PREALLOCATED_MONITORS</a>&#160;&#160;&#160;6 /* the number of preallocated monitors */</td></tr>
+<tr class="separator:afa8f0aad9e8b520f290cb9f02077caaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d0fadc4d22bb957b79db48ffabf09e9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#a5d0fadc4d22bb957b79db48ffabf09e9">RGFW_COCOA_FRAME_NAME</a>&#160;&#160;&#160;NULL</td></tr>
 <tr class="separator:a5d0fadc4d22bb957b79db48ffabf09e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd148a2771096e4a671e32f51be8f69f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a>&#160;&#160;&#160;__inline</td></tr>
@@ -277,9 +277,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:acdc50701ed59b55aed16179927d8109c"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structRGFW__mouseDeltaEvent.html">RGFW_mouseDeltaEvent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#acdc50701ed59b55aed16179927d8109c">RGFW_mouseDeltaEvent</a></td></tr>
 <tr class="memdesc:acdc50701ed59b55aed16179927d8109c"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for any mouse scroll or raw motion event  <a href="RGFW_8h.html#acdc50701ed59b55aed16179927d8109c">More...</a><br /></td></tr>
 <tr class="separator:acdc50701ed59b55aed16179927d8109c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98815b647758ab684536d7ab4b62e720"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structRGFW__mousePosEvent.html">RGFW_mousePosEvent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#a98815b647758ab684536d7ab4b62e720">RGFW_mousePosEvent</a></td></tr>
-<tr class="memdesc:a98815b647758ab684536d7ab4b62e720"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for a mouse position event (RGFW_mousePosChanged)  <a href="RGFW_8h.html#a98815b647758ab684536d7ab4b62e720">More...</a><br /></td></tr>
-<tr class="separator:a98815b647758ab684536d7ab4b62e720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06527ef1799ee6a6eaa459751521c436"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structRGFW__mouseMotionEvent.html">RGFW_mouseMotionEvent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#a06527ef1799ee6a6eaa459751521c436">RGFW_mouseMotionEvent</a></td></tr>
+<tr class="memdesc:a06527ef1799ee6a6eaa459751521c436"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for a mouse position event (RGFW_mouseMotion)  <a href="RGFW_8h.html#a06527ef1799ee6a6eaa459751521c436">More...</a><br /></td></tr>
+<tr class="separator:a06527ef1799ee6a6eaa459751521c436"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0b9c993bfe43ef69c00a5d07af518af"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structRGFW__keyEvent.html">RGFW_keyEvent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#ac0b9c993bfe43ef69c00a5d07af518af">RGFW_keyEvent</a></td></tr>
 <tr class="memdesc:ac0b9c993bfe43ef69c00a5d07af518af"><td class="mdescLeft">&#160;</td><td class="mdescRight">event data for a key press/release event  <a href="RGFW_8h.html#ac0b9c993bfe43ef69c00a5d07af518af">More...</a><br /></td></tr>
 <tr class="separator:ac0b9c993bfe43ef69c00a5d07af518af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -492,8 +492,11 @@ Functions</h2></td></tr>
 <tr class="memdesc:a26b4e40389fe49e9d7c82a87cd36358e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Poll and check for monitor updates (this is called internally on monitor update events and RGFW_init)  <a href="RGFW_8h.html#a26b4e40389fe49e9d7c82a87cd36358e">More...</a><br /></td></tr>
 <tr class="separator:a26b4e40389fe49e9d7c82a87cd36358e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4107a818ced3d763b05181d28d76f66"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="structRGFW__monitor.html">RGFW_monitor</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#ac4107a818ced3d763b05181d28d76f66">RGFW_getMonitors</a> (size_t *len)</td></tr>
-<tr class="memdesc:ac4107a818ced3d763b05181d28d76f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an array of all available monitors.  <a href="RGFW_8h.html#ac4107a818ced3d763b05181d28d76f66">More...</a><br /></td></tr>
+<tr class="memdesc:ac4107a818ced3d763b05181d28d76f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates and returns an array of all available monitors.  <a href="RGFW_8h.html#ac4107a818ced3d763b05181d28d76f66">More...</a><br /></td></tr>
 <tr class="separator:ac4107a818ced3d763b05181d28d76f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19b3b50f6af57183bf7cfb42050c7a86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="RGFW_8h.html#a5875a02d0e0e933b07afbe7b20941c0b">RGFW_bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#a19b3b50f6af57183bf7cfb42050c7a86">RGFW_getMonitorsPtr</a> (size_t max, <a class="el" href="structRGFW__monitor.html">RGFW_monitor</a> **monitors, size_t *len)</td></tr>
+<tr class="memdesc:a19b3b50f6af57183bf7cfb42050c7a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">fills a pre-allocated array with available monitors.  <a href="RGFW_8h.html#a19b3b50f6af57183bf7cfb42050c7a86">More...</a><br /></td></tr>
+<tr class="separator:a19b3b50f6af57183bf7cfb42050c7a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba07cb3ea35910da179f20f8854b1931"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="structRGFW__monitor.html">RGFW_monitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RGFW_8h.html#aba07cb3ea35910da179f20f8854b1931">RGFW_getPrimaryMonitor</a> (void)</td></tr>
 <tr class="memdesc:aba07cb3ea35910da179f20f8854b1931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the primary monitor.  <a href="RGFW_8h.html#aba07cb3ea35910da179f20f8854b1931">More...</a><br /></td></tr>
 <tr class="separator:aba07cb3ea35910da179f20f8854b1931"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -689,7 +692,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:ga882bf24aa27c3573754582a29951f7e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">checks if a data drop occurred in the window (first frame only)  <a href="group__Window__management.html#ga882bf24aa27c3573754582a29951f7e3">More...</a><br /></td></tr>
 <tr class="separator:ga882bf24aa27c3573754582a29951f7e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf3ef0b76c4faa492cc86fd6af873d32d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="structRGFW__dataDropNode.html">RGFW_dataDropNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Window__management.html#gaf3ef0b76c4faa492cc86fd6af873d32d">RGFW_window_getDataDrop</a> (<a class="el" href="RGFW_8h.html#a2520d2d7f43e5df60edeed92733c1de6">RGFW_window</a> *win)</td></tr>
-<tr class="memdesc:gaf3ef0b76c4faa492cc86fd6af873d32d"><td class="mdescLeft">&#160;</td><td class="mdescRight">retrieves datta from a data drop (drag and drop)  <a href="group__Window__management.html#gaf3ef0b76c4faa492cc86fd6af873d32d">More...</a><br /></td></tr>
+<tr class="memdesc:gaf3ef0b76c4faa492cc86fd6af873d32d"><td class="mdescLeft">&#160;</td><td class="mdescRight">retrieves data from a data drop (drag and drop)  <a href="group__Window__management.html#gaf3ef0b76c4faa492cc86fd6af873d32d">More...</a><br /></td></tr>
 <tr class="separator:gaf3ef0b76c4faa492cc86fd6af873d32d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab9fbaeec9a1268374ab141b6ccfc41a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Window__management.html#gab9fbaeec9a1268374ab141b6ccfc41a3">RGFW_window_close</a> (<a class="el" href="RGFW_8h.html#a2520d2d7f43e5df60edeed92733c1de6">RGFW_window</a> *win)</td></tr>
 <tr class="memdesc:gab9fbaeec9a1268374ab141b6ccfc41a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">closes the window and frees its associated structure  <a href="group__Window__management.html#gab9fbaeec9a1268374ab141b6ccfc41a3">More...</a><br /></td></tr>
@@ -749,10 +752,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:ga54a2347c554cf916668c873cbce48d54"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the opacity level of the window  <a href="group__Window__management.html#ga54a2347c554cf916668c873cbce48d54">More...</a><br /></td></tr>
 <tr class="separator:ga54a2347c554cf916668c873cbce48d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga210cfa064760291d2823fb330ea50d9c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Window__management.html#ga210cfa064760291d2823fb330ea50d9c">RGFW_window_setBorder</a> (<a class="el" href="RGFW_8h.html#a2520d2d7f43e5df60edeed92733c1de6">RGFW_window</a> *win, <a class="el" href="RGFW_8h.html#a5875a02d0e0e933b07afbe7b20941c0b">RGFW_bool</a> border)</td></tr>
-<tr class="memdesc:ga210cfa064760291d2823fb330ea50d9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">toggles window borders  <a href="group__Window__management.html#ga210cfa064760291d2823fb330ea50d9c">More...</a><br /></td></tr>
+<tr class="memdesc:ga210cfa064760291d2823fb330ea50d9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">toggles window borders / frame / decor  <a href="group__Window__management.html#ga210cfa064760291d2823fb330ea50d9c">More...</a><br /></td></tr>
 <tr class="separator:ga210cfa064760291d2823fb330ea50d9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacbbf5186b802bd637defa9dea7c086bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="RGFW_8h.html#a5875a02d0e0e933b07afbe7b20941c0b">RGFW_bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Window__management.html#gacbbf5186b802bd637defa9dea7c086bc">RGFW_window_borderless</a> (<a class="el" href="RGFW_8h.html#a2520d2d7f43e5df60edeed92733c1de6">RGFW_window</a> *win)</td></tr>
-<tr class="memdesc:gacbbf5186b802bd637defa9dea7c086bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">checks if the window is borderless  <a href="group__Window__management.html#gacbbf5186b802bd637defa9dea7c086bc">More...</a><br /></td></tr>
+<tr class="memdesc:gacbbf5186b802bd637defa9dea7c086bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">checks if the window is borderless (has a border, frame or decor)  <a href="group__Window__management.html#gacbbf5186b802bd637defa9dea7c086bc">More...</a><br /></td></tr>
 <tr class="separator:gacbbf5186b802bd637defa9dea7c086bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafb366b10a525683266ad9ba0db2760ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Window__management.html#gafb366b10a525683266ad9ba0db2760ef">RGFW_window_setDND</a> (<a class="el" href="RGFW_8h.html#a2520d2d7f43e5df60edeed92733c1de6">RGFW_window</a> *win, <a class="el" href="RGFW_8h.html#a5875a02d0e0e933b07afbe7b20941c0b">RGFW_bool</a> allow)</td></tr>
 <tr class="memdesc:gafb366b10a525683266ad9ba0db2760ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">toggles drag-and-drop (DND) support for the window  <a href="group__Window__management.html#gafb366b10a525683266ad9ba0db2760ef">More...</a><br /></td></tr>
@@ -895,10 +898,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:gae0e0efe8d0ab3c07ef768ae92695d489"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the size of the RGFW_info structure.  <a href="group__Supporting.html#gae0e0efe8d0ab3c07ef768ae92695d489">More...</a><br /></td></tr>
 <tr class="separator:gae0e0efe8d0ab3c07ef768ae92695d489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf21d54287928c08a4df31a636021c0b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="RGFW_8h.html#a48d6cd8e4135fb2ff7e7f2dac84089ec">i32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Supporting.html#gaf21d54287928c08a4df31a636021c0b9">RGFW_init</a> (void)</td></tr>
-<tr class="memdesc:gaf21d54287928c08a4df31a636021c0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the RGFW library.  <a href="group__Supporting.html#gaf21d54287928c08a4df31a636021c0b9">More...</a><br /></td></tr>
+<tr class="memdesc:gaf21d54287928c08a4df31a636021c0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the RGFW library internally.  <a href="group__Supporting.html#gaf21d54287928c08a4df31a636021c0b9">More...</a><br /></td></tr>
 <tr class="separator:gaf21d54287928c08a4df31a636021c0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga02ddb1e7bbc4428fcb29d2bb14ebb87f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Supporting.html#ga02ddb1e7bbc4428fcb29d2bb14ebb87f">RGFW_deinit</a> (void)</td></tr>
-<tr class="memdesc:ga02ddb1e7bbc4428fcb29d2bb14ebb87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitializes the RGFW library.  <a href="group__Supporting.html#ga02ddb1e7bbc4428fcb29d2bb14ebb87f">More...</a><br /></td></tr>
+<tr class="memdesc:ga02ddb1e7bbc4428fcb29d2bb14ebb87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitializes the current instance of the RGFW library.  <a href="group__Supporting.html#ga02ddb1e7bbc4428fcb29d2bb14ebb87f">More...</a><br /></td></tr>
 <tr class="separator:ga02ddb1e7bbc4428fcb29d2bb14ebb87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa07f8ecabbe23fc5ed6dd12be99cec4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="RGFW_8h.html#a48d6cd8e4135fb2ff7e7f2dac84089ec">i32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Supporting.html#gaa07f8ecabbe23fc5ed6dd12be99cec4e">RGFW_init_ptr</a> (<a class="el" href="RGFW_8h.html#adaaf064e070d4b9f2f411b601bb2d6ed">RGFW_info</a> *info)</td></tr>
 <tr class="memdesc:gaa07f8ecabbe23fc5ed6dd12be99cec4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes RGFW using a user-provided RGFW_info structure.  <a href="group__Supporting.html#gaa07f8ecabbe23fc5ed6dd12be99cec4e">More...</a><br /></td></tr>
@@ -1136,20 +1139,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af3d151fddc5615b7e7e795ef2ede6595" name="af3d151fddc5615b7e7e795ef2ede6595"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3d151fddc5615b7e7e795ef2ede6595">&#9670;&#160;</a></span>RGFW_MAX_MONITORS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define RGFW_MAX_MONITORS&#160;&#160;&#160;6</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aef87ec6dcdfa590cf3ccc9a7a2dd25eb" name="aef87ec6dcdfa590cf3ccc9a7a2dd25eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aef87ec6dcdfa590cf3ccc9a7a2dd25eb">&#9670;&#160;</a></span>RGFW_MEMCPY</h2>
 
@@ -1234,6 +1223,20 @@ Functions</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td>&#160;&#160;&#160;((x &lt; y) ? x : y)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afa8f0aad9e8b520f290cb9f02077caaf" name="afa8f0aad9e8b520f290cb9f02077caaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa8f0aad9e8b520f290cb9f02077caaf">&#9670;&#160;</a></span>RGFW_PREALLOCATED_MONITORS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RGFW_PREALLOCATED_MONITORS&#160;&#160;&#160;6 /* the number of preallocated monitors */</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1887,19 +1890,19 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a98815b647758ab684536d7ab4b62e720" name="a98815b647758ab684536d7ab4b62e720"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98815b647758ab684536d7ab4b62e720">&#9670;&#160;</a></span>RGFW_mousePosEvent</h2>
+<a id="a06527ef1799ee6a6eaa459751521c436" name="a06527ef1799ee6a6eaa459751521c436"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06527ef1799ee6a6eaa459751521c436">&#9670;&#160;</a></span>RGFW_mouseMotionEvent</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef struct <a class="el" href="structRGFW__mousePosEvent.html">RGFW_mousePosEvent</a> <a class="el" href="structRGFW__mousePosEvent.html">RGFW_mousePosEvent</a></td>
+          <td class="memname">typedef struct <a class="el" href="structRGFW__mouseMotionEvent.html">RGFW_mouseMotionEvent</a> <a class="el" href="structRGFW__mouseMotionEvent.html">RGFW_mouseMotionEvent</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>event data for a mouse position event (RGFW_mousePosChanged) </p>
+<p>event data for a mouse position event (RGFW_mouseMotion) </p>
 
 </div>
 </div>
@@ -2661,12 +2664,13 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>optional bitwise arguments for making a windows, these can be OR'd together </p>
-<p >&lt; the window doesn't have a border</p>
+<p >&lt; the window doesn't have a border / frame / decor</p>
 <p >&lt; the window cannot be resized by the user</p>
 <p >&lt; the window supports drag and drop</p>
 <p >the window should hide the mouse (can be toggled later on using <code>RGFW_window_showMouse</code>)</p>
 <p >&lt; the window is fullscreen by default</p>
-<p >&lt; the window is transparent (only properly works on X11 and MacOS, although it's meant for for windows)</p>
+<p >&lt; the window is translucent (only properly works on X11 and MacOS, although it's meant for for windows)</p>
+<p >&lt; the window is translucent (only properly works on X11 and MacOS, although it's meant for for windows)</p>
 <p >center the window on the screen</p>
 <p >&lt; use raw mouse mouse on window creation</p>
 <p >scale the window to the screen</p>
@@ -2846,7 +2850,7 @@ Functions</h2></td></tr>
 <p >&lt; a mouse button has been pressed (left,middle,right)</p>
 <p >&lt; a mouse button has been released (left,middle,right)</p>
 <p >&lt; a mouse scroll event</p>
-<p >&lt; the position of the mouse has been changed</p>
+<p >&lt; the position of the mouse has been changed / the mouse has moved</p>
 <p >&lt; raw mouse motion</p>
 <p >&lt; mouse entered the window</p>
 <p >&lt; mouse left the window</p>
@@ -2865,6 +2869,7 @@ Functions</h2></td></tr>
 <p >&lt; a monitor has been connected</p>
 <p >&lt; a monitor has been disconnected</p>
 <p >&lt; the number of event types there are</p>
+<p >&lt; alias for RGFW_mouseMotion (may be deleted at some point)</p>
 
 </div>
 </div>
@@ -3302,14 +3307,59 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Retrieves an array of all available monitors. </p>
+<p>Allocates and returns an array of all available monitors. </p>
 <p >! </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">len</td><td>[OUTPUT] A pointer to store the number of monitors found (maximum of RGFW_MAX_MONITORS [6 by default]). </td></tr>
+    <tr><td class="paramname">len</td><td>[OUTPUT] A pointer to store the number of monitors found. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An array of pointers to <a class="el" href="structRGFW__monitor.html" title="structure for monitor data">RGFW_monitor</a> structures. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An allocated array of pointers to <a class="el" href="structRGFW__monitor.html" title="structure for monitor data">RGFW_monitor</a> structures that must be freed. </dd></dl>
+
+</div>
+</div>
+<a id="a19b3b50f6af57183bf7cfb42050c7a86" name="a19b3b50f6af57183bf7cfb42050c7a86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19b3b50f6af57183bf7cfb42050c7a86">&#9670;&#160;</a></span>RGFW_getMonitorsPtr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="RGFW_8h.html#abd148a2771096e4a671e32f51be8f69f">RGFWDEF</a> <a class="el" href="RGFW_8h.html#a5875a02d0e0e933b07afbe7b20941c0b">RGFW_bool</a> RGFW_getMonitorsPtr </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structRGFW__monitor.html">RGFW_monitor</a> **&#160;</td>
+          <td class="paramname"><em>monitors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>fills a pre-allocated array with available monitors. </p>
+<p >! </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maximum</td><td>number of monitors that the passed [monitors] buffer supports, can be zero to get the length alone </td></tr>
+    <tr><td class="paramname">pre-allocated</td><td>buffer of monitors, can be NULL to get the length alone </td></tr>
+    <tr><td class="paramname">len</td><td>[OUTPUT] A pointer to store the number of monitors found, if max is not zero and monitors is not NULL, length will be set to max. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An array of pointers to <a class="el" href="structRGFW__monitor.html" title="structure for monitor data">RGFW_monitor</a> structures or NULL if the function failed. </dd></dl>
 
 </div>
 </div>

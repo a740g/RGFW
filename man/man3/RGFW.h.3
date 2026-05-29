@@ -1,4 +1,4 @@
-.TH "RGFW.h" 3 "Wed Apr 15 2026" "RGFW" \" -*- nroff -*-
+.TH "RGFW.h" 3 "Fri May 29 2026" "RGFW" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -56,9 +56,9 @@ RGFW.h
 .br
 .RI "event data for any mouse scroll or raw motion event "
 .ti -1c
-.RI "struct \fBRGFW_mousePosEvent\fP"
+.RI "struct \fBRGFW_mouseMotionEvent\fP"
 .br
-.RI "event data for a mouse position event (RGFW_mousePosChanged) "
+.RI "event data for a mouse position event (RGFW_mouseMotion) "
 .ti -1c
 .RI "struct \fBRGFW_keyEvent\fP"
 .br
@@ -153,7 +153,7 @@ RGFW.h
 .RI "#define \fBRGFW_MAX_EVENTS\fP   32"
 .br
 .ti -1c
-.RI "#define \fBRGFW_MAX_MONITORS\fP   6"
+.RI "#define \fBRGFW_PREALLOCATED_MONITORS\fP   6 /* the number of preallocated monitors */"
 .br
 .ti -1c
 .RI "#define \fBRGFW_COCOA_FRAME_NAME\fP   NULL"
@@ -286,9 +286,9 @@ RGFW.h
 .br
 .RI "event data for any mouse scroll or raw motion event "
 .ti -1c
-.RI "typedef struct \fBRGFW_mousePosEvent\fP \fBRGFW_mousePosEvent\fP"
+.RI "typedef struct \fBRGFW_mouseMotionEvent\fP \fBRGFW_mouseMotionEvent\fP"
 .br
-.RI "event data for a mouse position event (RGFW_mousePosChanged) "
+.RI "event data for a mouse position event (RGFW_mouseMotion) "
 .ti -1c
 .RI "typedef struct \fBRGFW_keyEvent\fP \fBRGFW_keyEvent\fP"
 .br
@@ -576,7 +576,11 @@ RGFW.h
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_monitor\fP ** \fBRGFW_getMonitors\fP (size_t *len)"
 .br
-.RI "Retrieves an array of all available monitors\&. "
+.RI "Allocates and returns an array of all available monitors\&. "
+.ti -1c
+.RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_getMonitorsPtr\fP (size_t max, \fBRGFW_monitor\fP **monitors, size_t *len)"
+.br
+.RI "fills a pre-allocated array with available monitors\&. "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_monitor\fP * \fBRGFW_getPrimaryMonitor\fP (void)"
 .br
@@ -839,7 +843,7 @@ RGFW.h
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_dataDropNode\fP * \fBRGFW_window_getDataDrop\fP (\fBRGFW_window\fP *win)"
 .br
-.RI "retrieves datta from a data drop (drag and drop) "
+.RI "retrieves data from a data drop (drag and drop) "
 .ti -1c
 .RI "\fBRGFWDEF\fP void \fBRGFW_window_close\fP (\fBRGFW_window\fP *win)"
 .br
@@ -919,11 +923,11 @@ RGFW.h
 .ti -1c
 .RI "\fBRGFWDEF\fP void \fBRGFW_window_setBorder\fP (\fBRGFW_window\fP *win, \fBRGFW_bool\fP border)"
 .br
-.RI "toggles window borders "
+.RI "toggles window borders / frame / decor "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBRGFW_bool\fP \fBRGFW_window_borderless\fP (\fBRGFW_window\fP *win)"
 .br
-.RI "checks if the window is borderless "
+.RI "checks if the window is borderless (has a border, frame or decor) "
 .ti -1c
 .RI "\fBRGFWDEF\fP void \fBRGFW_window_setDND\fP (\fBRGFW_window\fP *win, \fBRGFW_bool\fP allow)"
 .br
@@ -1114,11 +1118,11 @@ RGFW.h
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBi32\fP \fBRGFW_init\fP (void)"
 .br
-.RI "Initializes the RGFW library\&. "
+.RI "Initializes the RGFW library internally\&. "
 .ti -1c
 .RI "\fBRGFWDEF\fP void \fBRGFW_deinit\fP (void)"
 .br
-.RI "Deinitializes the RGFW library\&. "
+.RI "Deinitializes the current instance of the RGFW library\&. "
 .ti -1c
 .RI "\fBRGFWDEF\fP \fBi32\fP \fBRGFW_init_ptr\fP (\fBRGFW_info\fP *info)"
 .br
@@ -1166,13 +1170,13 @@ RGFW.h
 
 .SS "#define RGFW_MAX_EVENTS   32"
 
-.SS "#define RGFW_MAX_MONITORS   6"
-
 .SS "#define RGFW_MEMCPY(dist, src, len)   memcpy(dist, src, len)"
 
 .SS "#define RGFW_MEMZERO(ptr, num)   memset(ptr, 0, num)"
 
 .SS "#define RGFW_MIN(x, y)   ((x < y) ? x : y)"
+
+.SS "#define RGFW_PREALLOCATED_MONITORS   6 /* the number of preallocated monitors */"
 
 .SS "#define RGFW_ROUND(x)   (\fBi32\fP)((x) >= 0 ? (x) + 0\&.5f : (x) \- 0\&.5f)"
 
@@ -1288,10 +1292,10 @@ event data for any mouse button event (press/release)
 
 .PP
 event data for any mouse scroll or raw motion event 
-.SS "typedef struct \fBRGFW_mousePosEvent\fP \fBRGFW_mousePosEvent\fP"
+.SS "typedef struct \fBRGFW_mouseMotionEvent\fP \fBRGFW_mouseMotionEvent\fP"
 
 .PP
-event data for a mouse position event (RGFW_mousePosChanged) 
+event data for a mouse position event (RGFW_mouseMotion) 
 .SS "typedef struct \fBRGFW_nativeImage\fP \fBRGFW_nativeImage\fP"
 
 .PP
@@ -1538,7 +1542,7 @@ flags for toggling whether or not an event should be processed
 .SS "typedef RGFW_ENUM (\fBu32\fP, RGFW_windowFlags)"
 
 .PP
-optional bitwise arguments for making a windows, these can be OR'd together < the window doesn't have a border
+optional bitwise arguments for making a windows, these can be OR'd together < the window doesn't have a border / frame / decor
 .PP
 < the window cannot be resized by the user
 .PP
@@ -1548,7 +1552,9 @@ the window should hide the mouse (can be toggled later on using \fCRGFW_window_s
 .PP
 < the window is fullscreen by default
 .PP
-< the window is transparent (only properly works on X11 and MacOS, although it's meant for for windows)
+< the window is translucent (only properly works on X11 and MacOS, although it's meant for for windows)
+.PP
+< the window is translucent (only properly works on X11 and MacOS, although it's meant for for windows)
 .PP
 center the window on the screen
 .PP
@@ -1620,7 +1626,7 @@ codes for the event types that can be sent < no event has been sent
 .PP
 < a mouse scroll event
 .PP
-< the position of the mouse has been changed
+< the position of the mouse has been changed / the mouse has moved
 .PP
 < raw mouse motion
 .PP
@@ -1657,6 +1663,8 @@ codes for the event types that can be sent < no event has been sent
 < a monitor has been disconnected
 .PP
 < the number of event types there are
+.PP
+< alias for RGFW_mouseMotion (may be deleted at some point)
 .SS "typedef RGFW_ENUM (\fBu8\fP, RGFW_flashRequest)"
 @breif flash request type 
 .SS "typedef RGFW_ENUM (\fBu8\fP, RGFW_format)"
@@ -1785,16 +1793,36 @@ A pointer to the Cocoa layer, or NULL if the platform is not in use\&.
 .SS "\fBRGFWDEF\fP \fBRGFW_monitor\fP ** RGFW_getMonitors (size_t * len)"
 
 .PP
-Retrieves an array of all available monitors\&. ! 
+Allocates and returns an array of all available monitors\&. ! 
 .PP
 \fBParameters\fP
 .RS 4
-\fIlen\fP [OUTPUT] A pointer to store the number of monitors found (maximum of RGFW_MAX_MONITORS [6 by default])\&. 
+\fIlen\fP [OUTPUT] A pointer to store the number of monitors found\&. 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-An array of pointers to \fBRGFW_monitor\fP structures\&. 
+An allocated array of pointers to \fBRGFW_monitor\fP structures that must be freed\&. 
+.RE
+.PP
+
+.SS "\fBRGFWDEF\fP \fBRGFW_bool\fP RGFW_getMonitorsPtr (size_t max, \fBRGFW_monitor\fP ** monitors, size_t * len)"
+
+.PP
+fills a pre-allocated array with available monitors\&. ! 
+.PP
+\fBParameters\fP
+.RS 4
+\fImaximum\fP number of monitors that the passed [monitors] buffer supports, can be zero to get the length alone 
+.br
+\fIpre-allocated\fP buffer of monitors, can be NULL to get the length alone 
+.br
+\fIlen\fP [OUTPUT] A pointer to store the number of monitors found, if max is not zero and monitors is not NULL, length will be set to max\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+An array of pointers to \fBRGFW_monitor\fP structures or NULL if the function failed\&. 
 .RE
 .PP
 
