@@ -1,7 +1,7 @@
-#define RGFW_OPENGL
 #define RGFW_DEBUG
 #define RGFW_IMPLEMENTATION
 #define RGFW_EGL
+
 #include "RGFW.h"
 
 #include <stdio.h>
@@ -14,6 +14,8 @@
 #endif
 
 int main(void) {
+	RGFW_init("RGFW Example", RGFW_initEGL);
+
     RGFW_glHints* hints = RGFW_getGlobalHints_OpenGL();
     hints->major = 1;
     hints->minor = 1;
@@ -26,7 +28,7 @@ int main(void) {
     while (RGFW_window_shouldClose(win) == RGFW_FALSE) {
         RGFW_pollEvents();
 
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBegin(GL_TRIANGLES);
@@ -39,5 +41,6 @@ int main(void) {
     }
 
     RGFW_window_close(win);
+    RGFW_deinit();
     return 0;
 }

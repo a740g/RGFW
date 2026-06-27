@@ -5,17 +5,16 @@
 # NO_GLES=1 -> do not compile the gles example (on by default for non-linux OSes)
 # NO_OSMESA=1 -> do not compile the osmesa example (on by default for non-linux OSes)
 
-CC ?= gcc
-AR ?= ar
+CC = gcc
+AR = ar
 
 # used for compiling RGFW.o
 CUSTOM_CFLAGS =
 # used for the examples
-CFLAGS =
-CFLAGS += -g3
+CFLAGS = -g3
 
-ifdef RGFW_C89
-	CUSTOM_CFLAGS += -std=c89 -Wno-declaration-after-statement -Wall -Wextra -Wpedantic
+ifdef (RGFW_C89)
+	CUSTOM_CFLAGS = -std=c89 -Wno-declaration-after-statement -Wall -Wextra -Wpedantic
 endif
 
 DX11_LIBS = -static -lgdi32 -ldxgi -ld3d11 -luuid -ld3dcompiler
@@ -169,13 +168,13 @@ EXAMPLE_OUTPUTS = \
 	examples/smooth-resize/smooth-resize \
 	examples/multi-window/multi-window \
 	examples/standard-mouse-icons/icons \
+	examples/clipboard/clipboard \
 	examples/custom_alloc/custom_alloc \
 	examples/flash/flash \
 
 EXAMPLE_OUTPUTS_CUSTOM = \
 	examples/window_icons/icons \
 	examples/mouse_icons/icons \
-	examples/gamepad/gamepad \
 	examples/first-person-camera/camera \
 	examples/microui_demo/microui_demo \
 	examples/gl33/gl33 \
@@ -192,13 +191,14 @@ EXAMPLE_OUTPUTS_CUSTOM = \
 
 TEST_OUTPUTS = \
 			   tests/loop \
+			   tests/clipboard \
+			   tests/memory \
+
 
 
 all: $(WAYLAND_SOURCE) $(EXAMPLE_OUTPUTS) $(EXAMPLE_OUTPUTS_CUSTOM) libRGFW$(LIB_EXT) libRGFW.a
 
 examples: $(WAYLAND_SOURCE) $(EXAMPLE_OUTPUTS) $(EXAMPLE_OUTPUTS_CUSTOM)
-
-tests: $(WAYLAND_SOURCE) $(TEST_OUTPUTS)
 
 examples/gears/gears: examples/gears/gears.c RGFW.h $(WAYLAND_SOURCE)
 ifneq (,$(filter $(CC),emcc em++))
@@ -321,8 +321,6 @@ examples/window_icons/icons: examples/window_icons/icons.c RGFW.h $(WAYLAND_SOUR
 	$(CC) $(CFLAGS) -I. $< $(DEFINES) $(LIBS) -lm $(LINK_GL1) -o $@$(EXT)
 examples/mouse_icons/icons: examples/mouse_icons/icons.c RGFW.h $(WAYLAND_SOURCE)
 	$(CC) $(CFLAGS) -I. $< $(DEFINES) $(LIBS) -lm $(LINK_GL1) -o $@$(EXT)
-examples/gamepad/gamepad: examples/gamepad/gamepad.c RGFW.h $(WAYLAND_SOURCE)
-	$(CC) $(CFLAGS) -I. $< $(DEFINES) $(LIBS) -lm $(LINK_GL1) -o $@$(EXT)
 
 examples/first-person-camera/camera: examples/first-person-camera/camera.c RGFW.h $(WAYLAND_SOURCE)
 	$(CC) $(CFLAGS) -I. $< $(DEFINES) $(LIBS) -lm $(LINK_GL1) -o $@$(EXT)
@@ -348,6 +346,8 @@ $(EXAMPLE_OUTPUTS): %: %.c RGFW.h $(WAYLAND_SOURCE)
 
 $(TEST_OUTPUTS): %: %.c RGFW.h $(WAYLAND_SOURCE)
 	$(CC) $(CFLAGS) $(WARNINGS) -I. $< $(LINK_GL1) $(DEFINES) $(LIBS) $($)  -o $@$(EXT)
+
+run_tests: $(TEST_OUTPUTS)
 	@for exe in $(TEST_OUTPUTS); do \
 		echo "Running $$exe..."; \
 		./$$exe$(EXT); \
