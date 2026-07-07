@@ -2370,9 +2370,27 @@ RGFWDEF RGFW_monitor* RGFW_window_getMonitor(RGFW_window* win);
 
 /**!
  * @brief Reads clipboard data.
+ * @param requestedType the requested clipboard data type to attempt to read
  * @return A pointer to the clipboard data object or NULL on failure.
 */
-RGFWDEF const RGFW_dataTransfer* RGFW_readClipboard(void);
+RGFWDEF const RGFW_dataTransfer* RGFW_readClipboard(RGFW_dataTransferType requestedType);
+
+/**!
+ * @brief Reads clipboard data into your object pointer using your provided buffer, or returns the required length if the buffer is NULL or bufferCapacity is 0.
+ * @param requestedType the requested clipboard data type to attempt to read
+ * @param buffer the buffer used to fill the output dataTransfer object's data
+ * @param capacity the capacity/length of the buffer in bytes
+ * @param data [OUTPUT] A pointer to the dataTransfer object that will receive the clipboard data. (cannot be NULL)
+ * @return returns RGFW_TRUE on success and RGFW_FALSE on failure
+*/
+RGFWDEF RGFW_bool RGFW_readClipboardPtr(RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* data);
+
+/**!
+ * @brief Reads clipboard string data.
+ * @param requestedType the requested clipboard data type to attempt to read
+ * @return A pointer to the clipboard data object or NULL on failure.
+*/
+RGFWDEF const RGFW_dataTransfer* RGFW_readClipboardString(void);
 
 /**!
  * @brief Reads clipboard data into your object pointer using your provided buffer, or returns the required length if the buffer is NULL or bufferCapacity is 0.
@@ -2381,7 +2399,7 @@ RGFWDEF const RGFW_dataTransfer* RGFW_readClipboard(void);
  * @param data [OUTPUT] A pointer to the dataTransfer object that will receive the clipboard data. (cannot be NULL)
  * @return returns RGFW_TRUE on success and RGFW_FALSE on failure
 */
-RGFWDEF RGFW_bool RGFW_readClipboardPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* data);
+RGFWDEF RGFW_bool RGFW_readClipboardStringPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* data);
 
 /**!
  * @brief Writes data to the clipboard.
@@ -3453,16 +3471,16 @@ void RGFW_setRawMouseMode(RGFW_bool state) {
 	RGFW_window_setRawMouseModePlatform(_RGFW->root, state);
 }
 
-const RGFW_dataTransfer* RGFW_readClipboard(void) {
+const RGFW_dataTransfer* RGFW_readClipboard(RGFW_dataTransferType requestedType) {
 	RGFW_dataTransfer data_check;
-	RGFW_bool ret = RGFW_readClipboardPtr(NULL, 0, &data_check);
+	RGFW_bool ret = RGFW_readClipboardPtr(requestedType, NULL, 0, &data_check);
 	if (ret == RGFW_FALSE || data_check.length == 0) return _RGFW->clipboard;
 
 	u8* cont_data = (u8*)RGFW_ALLOC(sizeof(RGFW_dataTransfer) + (size_t)data_check.length);
 	RGFW_ASSERT(cont_data != NULL);
 
 	RGFW_dataTransfer* data = (RGFW_dataTransfer*)(void*)cont_data;
-	ret = RGFW_readClipboardPtr((u8*)&cont_data[sizeof(RGFW_dataTransfer) - 1], data_check.length, data);
+	ret = RGFW_readClipboardPtr(requestedType, (u8*)&cont_data[sizeof(RGFW_dataTransfer) - 1], data_check.length, data);
 
 	if (ret == RGFW_FALSE || data->length == 0) {
 		RGFW_FREE(cont_data);
@@ -3476,8 +3494,10 @@ const RGFW_dataTransfer* RGFW_readClipboard(void) {
 	return _RGFW->clipboard;
 }
 
-/* generic RGFW defines */
+const RGFW_dataTransfer* RGFW_readClipboardString(void)  { return RGFW_readClipboard(RGFW_dataText); }
+RGFW_bool RGFW_readClipboardStringPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* data) { return RGFW_readClipboardPtr(RGFW_dataText, buffer, capacity, data); }
 
+/* generic RGFW defines */
 void RGFW_initKeycodes(void) {
 	RGFW_MEMZERO(_RGFW->keycodes, sizeof(_RGFW->keycodes));
 	RGFW_initKeycodesPlatform();
@@ -8005,9 +8025,11 @@ void RGFW_FUNC(RGFW_window_flash) (RGFW_window* win, RGFW_flashRequest request) 
     XFree(wmhints);
 }
 
-RGFW_bool RGFW_FUNC(RGFW_readClipboardPtr) (u8* buffer, size_t capacity, RGFW_dataTransfer* dataTransfer) {
+RGFW_bool RGFW_FUNC(RGFW_readClipboardPtr) (RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* dataTransfer) {
 	RGFW_ASSERT(_RGFW && "An RGFW context must be initialized using RGFW_init and/or set with RGFW_setInfo");
 	RGFW_ASSERT(dataTransfer != NULL);
+
+	if (requestedType != RGFW_dataText) return RGFW_FALSE;
 	dataTransfer->data = (char*)buffer;
 
 	if (XGetSelectionOwner(_RGFW->display, _RGFW->CLIPBOARD) == _RGFW->helperWindow) {
@@ -10584,8 +10606,10 @@ void RGFW_FUNC(RGFW_window_flash) (RGFW_window* win, RGFW_flashRequest request) 
 	}
 }
 
-RGFW_bool RGFW_FUNC(RGFW_readClipboardPtr) (u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
+RGFW_bool RGFW_FUNC(RGFW_readClipboardPtr) (RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
 	RGFW_ASSERT(data != NULL);
+
+	if (requestedType != RGFW_dataText) return RGFW_FALSE;
 
 	if (_RGFW->unixClipboard == NULL || _RGFW->unixClipboard->length == 0) {
 		data->length = 0;
@@ -12626,8 +12650,11 @@ RGFW_bool RGFW_window_setIconEx(RGFW_window* win, u8* data, i32 w, i32 h, RGFW_f
 	#endif
 }
 
-RGFW_bool RGFW_readClipboardPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
+RGFW_bool RGFW_readClipboardPtr(RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
 	RGFW_ASSERT(data != NULL);
+
+	if (requestedType != RGFW_dataText) return RGFW_FALSE;
+
 	/* Open the clipboard */
 	size_t retry = 0;
 	BOOL isOpen = FALSE;
@@ -13003,12 +13030,15 @@ PFN_LMGetKbdType LMGetKbdTypeSrc;
 
 CFStringRef kTISPropertyUnicodeKeyLayoutDataSrc;
 
+#define RSGL_NSPasteboardTypeURL "public.url"
+#define RSGL_NSPasteboardTypeFileURL "public.file-url"
+#define RSGL_NSPasteboardTypeString "public.utf8-plain-text"
+
 #ifndef  __OBJC__
 typedef CGRect NSRect;
 typedef CGPoint NSPoint;
 typedef CGSize NSSize;
 
-typedef const char* NSPasteboardType;
 typedef unsigned long NSUInteger;
 typedef long NSInteger;
 typedef NSInteger NSModalResponse;
@@ -13045,8 +13075,6 @@ typedef RGFW_ENUM(u32, NSWindowStyleMask) {
 		NSWindowStyleMaskNonactivatingpanel = 1 << 7,
 		NSWindowStyleMaskHUDWindow = 1 << 13
 };
-
-#define NSPasteboardTypeString "public.utf8-plain-text"
 
 typedef RGFW_ENUM(i32, NSDragOperation) {
 	NSDragOperationNone = 0,
@@ -13088,8 +13116,6 @@ typedef RGFW_ENUM(NSInteger, NSWindowButton) {
     NSWindowFullScreenButton       = 7,
 };
 
-#define NSPasteboardTypeURL "public.url"
-#define NSPasteboardTypeFileURL "public.file-url"
 #define NSTrackingMouseEnteredAndExited   0x01
 #define NSTrackingMouseMoved              0x02
 #define NSTrackingCursorUpdate            0x04
@@ -13252,8 +13278,8 @@ id* cstrToNSStringArray(char** strs, size_t len) {
 	return nstrs;
 }
 
-const char* NSPasteboard_stringForType(id pasteboard, NSPasteboardType dataType, size_t* len);
-const char* NSPasteboard_stringForType(id pasteboard, NSPasteboardType dataType, size_t* len) {
+const char* NSPasteboard_stringForType(id pasteboard, const char* dataType, size_t* len);
+const char* NSPasteboard_stringForType(id pasteboard, const char* dataType, size_t* len) {
 	SEL func = sel_registerName("stringForType:");
 	id nsstr = NSString_stringWithUTF8String((const char*)dataType);
 	id nsString = ((id(*)(id, SEL, id))objc_msgSend)(pasteboard, func, nsstr);
@@ -13269,8 +13295,8 @@ id c_array_to_NSArray(void* array, size_t len) {
 }
 
 
-void NSregisterForDraggedTypes(id view, NSPasteboardType* newTypes, size_t len);
-void NSregisterForDraggedTypes(id view, NSPasteboardType* newTypes, size_t len) {
+void NSregisterForDraggedTypes(id view, const char** newTypes, size_t len);
+void NSregisterForDraggedTypes(id view, const char** newTypes, size_t len) {
 	id* ntypes = cstrToNSStringArray((char**)newTypes, len);
 
 	id array = c_array_to_NSArray(ntypes, len);
@@ -13278,8 +13304,8 @@ void NSregisterForDraggedTypes(id view, NSPasteboardType* newTypes, size_t len) 
 	NSRelease(array);
 }
 
-NSInteger NSPasteBoard_declareTypes(id pasteboard, NSPasteboardType* newTypes, size_t len, void* owner);
-NSInteger NSPasteBoard_declareTypes(id pasteboard, NSPasteboardType* newTypes, size_t len, void* owner) {
+NSInteger NSPasteBoard_declareTypes(id pasteboard, const char** newTypes, size_t len, void* owner);
+NSInteger NSPasteBoard_declareTypes(id pasteboard, const char** newTypes, size_t len, void* owner) {
 	id* ntypes = cstrToNSStringArray((char**)newTypes, len);
 
 	SEL func = sel_registerName("declareTypes:owner:");
@@ -13326,20 +13352,11 @@ static id RGFW__osxCustomInitWithRGFWWindow(id self, SEL _cmd, RGFW_window* win)
         );
 
         ((void (*)(id, SEL))objc_msgSend)(self, sel_registerName("updateTrackingAreas"));
+    
+		const char* types[] = {RSGL_NSPasteboardTypeURL, RSGL_NSPasteboardTypeFileURL, RSGL_NSPasteboardTypeString};
+		NSregisterForDraggedTypes((id)self, types, 3);
 
-        ((void (*)(id, SEL, id))objc_msgSend)(
-            self, sel_registerName("registerForDraggedTypes:"),
-            ((id (*)(Class, SEL, id))objc_msgSend)(
-                objc_getClass("NSArray"),
-                sel_registerName("arrayWithObject:"),
-                ((id (*)(Class, SEL, const char*))objc_msgSend)(
-                    objc_getClass("NSString"),
-                    sel_registerName("stringWithUTF8String:"),
-                    "public.url"
-                )
-            )
-        );
-    }
+	}
 
     return self;
 }
@@ -13432,17 +13449,25 @@ static bool RGFW__osxPerformDragOperation(id self, SEL sel, id sender) {
 		return 0;
 	}
 
-	id fileURLs = objc_msgSend_id_id(pasteBoard, sel_registerName("propertyListForType:"), fileURLsType);
-	int count = ((int (*)(id, SEL))objc_msgSend)(fileURLs, sel_registerName("count"));
+	id propertyList = objc_msgSend_id_id(pasteBoard, sel_registerName("propertyListForType:"), fileURLsType);
+
+	if (objc_msgSend_id_bool(propertyList, sel_registerName("isKindOfClass:"), objc_getClass("NSString"))) {
+		int string_count = ((int (*)(id, SEL))objc_msgSend)(propertyList , sel_registerName("length"));
+		const char *filePath = ((const char* (*)(id, SEL))objc_msgSend)(propertyList, sel_registerName("UTF8String"));
+		RGFW_dataDropCallback(win, filePath, (size_t)string_count + 1, RGFW_dataFile);
+	/*} if (objc_msgSend_id_bool(propertyList, sel_registerName("isKindOfClass:"), objc_getClass("NSData"))) { */
+	} if (objc_msgSend_id_bool(propertyList, sel_registerName("isKindOfClass:"), objc_getClass("NSArray")) == false) return false;
+
+	int count = ((int (*)(id, SEL))objc_msgSend)(propertyList, sel_registerName("count"));
 
 	if (count == 0)
 		return 0;
 
 	u32 i;
     for (i = 0; i < (u32)count; i++) {
-		id fileURL = objc_msgSend_arr(fileURLs, sel_registerName("objectAtIndex:"), i);
+		id fileURL = objc_msgSend_arr(propertyList, sel_registerName("objectAtIndex:"), i);
 		const char *filePath = ((const char* (*)(id, SEL))objc_msgSend)(fileURL, sel_registerName("UTF8String"));
-		int string_count = ((int (*)(id, SEL))objc_msgSend)(fileURL, sel_registerName("count"));
+		int string_count = ((int (*)(id, SEL))objc_msgSend)(fileURL, sel_registerName("length"));
 
 		RGFW_dataDropCallback(win, filePath, (size_t)string_count + 1, RGFW_dataFile);
 	}
@@ -14032,6 +14057,12 @@ i32 RGFW_initPlatform(const char* className, RGFW_initFlags flags) {
 		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("initWithRGFWWindow:"), (IMP)RGFW__osxCustomInitWithRGFWWindow, "@@:{CGRect={CGPoint=dd}{CGSize=dd}}");
 		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("wantsUpdateLayer"), (IMP)RGFW__osxWantsUpdateLayer, "B@:");
 		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("updateLayer"), (IMP)RGFW__osxUpdateLayer, "v@:");
+		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("draggingEntered:"), (IMP)RGFW__osxDraggingEntered, "l@:@");
+		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("draggingUpdated:"), (IMP)RGFW__osxDraggingUpdated, "l@:@");
+		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("draggingExited:"), (IMP)RGFW__osxDraggingEnded, "v@:@");
+		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("draggingEnded:"), (IMP)RGFW__osxDraggingEnded, "v@:@");
+		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("prepareForDragOperation:"), (IMP)RGFW__osxPrepareForDragOperation, "B@:@");
+		class_addMethod((Class)_RGFW->customViewClasses[i], sel_registerName("performDragOperation:"), (IMP)RGFW__osxPerformDragOperation, "B@:@");
 		objc_registerClassPair((Class)_RGFW->customViewClasses[i]);
 	}
 
@@ -14043,12 +14074,6 @@ i32 RGFW_initPlatform(const char* className, RGFW_initFlags flags) {
 	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("windowDidDeminiaturize:"), (IMP) RGFW__osxWindowDeminiaturize, "");
 	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("windowDidBecomeKey:"), (IMP) RGFW__osxWindowBecameKey, "");
 	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("windowDidResignKey:"), (IMP) RGFW__osxWindowResignKey, "");
-	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("draggingEntered:"), (IMP)RGFW__osxDraggingEntered, "l@:@");
-	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("draggingUpdated:"), (IMP)RGFW__osxDraggingUpdated, "l@:@");
-	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("draggingExited:"), (IMP)RGFW__osxDraggingEnded, "v@:@");
-	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("draggingEnded:"), (IMP)RGFW__osxDraggingEnded, "v@:@");
-	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("prepareForDragOperation:"), (IMP)RGFW__osxPrepareForDragOperation, "B@:@");
-	class_addMethod((Class)_RGFW->customWindowDelegateClass, sel_registerName("performDragOperation:"), (IMP)RGFW__osxPerformDragOperation, "B@:@");
 	objc_registerClassPair((Class)_RGFW->customWindowDelegateClass);
 	return 0;
 }
@@ -14118,13 +14143,6 @@ RGFW_window* RGFW_createWindowPlatform(const char* name, RGFW_windowFlags flags,
 
 	objc_msgSend_void_id((id)win->src.window, sel_registerName("setDelegate:"), (id)win->src.delegate);
 
-	if (flags & RGFW_windowAllowDND) {
-		win->internal.flags |= RGFW_windowAllowDND;
-
-		NSPasteboardType types[] = {NSPasteboardTypeURL, NSPasteboardTypeFileURL, NSPasteboardTypeString};
-		NSregisterForDraggedTypes((id)win->src.window, types, 3);
-	}
-
 	objc_msgSend_void_bool((id)win->src.window, sel_registerName("setAcceptsMouseMovedEvents:"), true);
 
 	if (flags & RGFW_windowTransparent) {
@@ -14132,6 +14150,10 @@ RGFW_window* RGFW_createWindowPlatform(const char* name, RGFW_windowFlags flags,
 
 		objc_msgSend_void_id((id)win->src.window, sel_registerName("setBackgroundColor:"),
 		NSColor_colorWithSRGB(0, 0, 0, 0));
+	}
+
+	if (flags & RGFW_windowAllowDND) {
+		win->internal.flags |= RGFW_windowAllowDND;
 	}
 
 	/* Show the window */
@@ -14320,7 +14342,7 @@ void RGFW_window_focus(RGFW_window* win) {
 void RGFW_window_raise(RGFW_window* win) {
 	RGFW_ASSERT(win != NULL);
 	((id(*)(id, SEL, SEL))objc_msgSend)((id)win->src.window, sel_registerName("orderFront:"), (SEL)NULL);
-    	objc_msgSend_void_id(win->src.window, sel_registerName("setLevel:"), kCGNormalWindowLevelKey);
+    	objc_msgSend_void_id(win->src.window, sel_registerName("setLevel:"), kCGNormalWindowLevel);
 }
 
 void RGFW_window_setFullscreen(RGFW_window* win, RGFW_bool fullscreen) {
@@ -14384,8 +14406,8 @@ void RGFW_window_minimize(RGFW_window* win) {
 
 void RGFW_window_setFloating(RGFW_window* win, RGFW_bool floating) {
     RGFW_ASSERT(win != NULL);
-    if (floating) objc_msgSend_void_id(win->src.window, sel_registerName("setLevel:"), kCGFloatingWindowLevelKey);
-    else 		  objc_msgSend_void_id(win->src.window, sel_registerName("setLevel:"), kCGNormalWindowLevelKey);
+    if (floating) objc_msgSend_void_id(win->src.window, sel_registerName("setLevel:"), kCGFloatingWindowLevel);
+    else 		  objc_msgSend_void_id(win->src.window, sel_registerName("setLevel:"), kCGNormalWindowLevel);
 }
 
 void RGFW_window_setOpacity(RGFW_window* win, u8 opacity) {
@@ -14410,7 +14432,7 @@ void RGFW_window_restore(RGFW_window* win) {
 RGFW_bool RGFW_window_isFloating(RGFW_window* win) {
 	RGFW_ASSERT(win != NULL);
 	int level = ((int (*)(id, SEL))objc_msgSend) ((id)(win->src.window), (SEL)sel_registerName("level"));
-	return level > kCGNormalWindowLevelKey;
+	return level > kCGNormalWindowLevel;
 }
 
 void RGFW_window_setName(RGFW_window* win, const char* name) {
@@ -14920,11 +14942,13 @@ RGFW_monitor* RGFW_window_getMonitor(RGFW_window* win) {
 	return &node->mon;
 }
 
-RGFW_bool RGFW_readClipboardPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
+RGFW_bool RGFW_readClipboardPtr(RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
 	RGFW_ASSERT(data != NULL);
 
+	if (requestedType != RGFW_dataText) return RGFW_FALSE;
+
 	size_t length = 0;
-	char* clip = (char*)NSPasteboard_stringForType(NSPasteboard_generalPasteboard(), NSPasteboardTypeString, &length);
+	char* clip = (char*)NSPasteboard_stringForType(NSPasteboard_generalPasteboard(), RSGL_NSPasteboardTypeString, &length);
 	if (clip == NULL) return RGFW_FALSE;
 
 	data->type = RGFW_dataText;
@@ -14945,12 +14969,12 @@ RGFW_bool RGFW_readClipboardPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* 
 RGFW_bool RGFW_writeClipboard(const RGFW_dataTransfer* data) {
 	RGFW_ASSERT(data != NULL);
 
-	NSPasteboardType array[] = { NSPasteboardTypeString, NULL };
+	const char* array[] = { RSGL_NSPasteboardTypeString, NULL };
 	NSPasteBoard_declareTypes(NSPasteboard_generalPasteboard(), array, 1, NULL);
 
 	SEL func = sel_registerName("setString:forType:");
 	bool ret = ((bool (*)(id, SEL, id, id))objc_msgSend)
-		(NSPasteboard_generalPasteboard(), func, NSString_stringWithUTF8String(data->data), NSString_stringWithUTF8String((const char*)NSPasteboardTypeString));
+		(NSPasteboard_generalPasteboard(), func, NSString_stringWithUTF8String(data->data), NSString_stringWithUTF8String((const char*)RSGL_NSPasteboardTypeString));
 
 	return (ret == true) ? RGFW_TRUE : RGFW_FALSE;
 }
@@ -15796,9 +15820,11 @@ RGFW_bool RGFW_writeClipboard(const RGFW_dataTransfer* data) {
 }
 
 
-RGFW_bool RGFW_readClipboardPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
+RGFW_bool RGFW_readClipboardPtr(RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* data) {
 	RGFW_ASSERT(data != NULL);
 	RGFW_UNUSED(buffer); RGFW_UNUSED(capacity);
+
+	if (requestedType != RGFW_dataText) return RGFW_FALSE;
 
 	/*
 		placeholder code for later
@@ -16172,7 +16198,7 @@ typedef void (*RGFW_window_moveMouse_ptr)(RGFW_window* win, i32 x, i32 y);
 typedef void (*RGFW_window_hide_ptr)(RGFW_window* win);
 typedef void (*RGFW_window_show_ptr)(RGFW_window* win);
 typedef void (*RGFW_window_flash_ptr)(RGFW_window* win, RGFW_flashRequest request);
-typedef RGFW_bool (*RGFW_readClipboardPtr_ptr)(u8* buffer, size_t capacity, RGFW_dataTransfer* data);
+typedef RGFW_bool (*RGFW_readClipboardPtr_ptr)(RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* data);
 typedef RGFW_bool (*RGFW_writeClipboard_ptr)(const RGFW_dataTransfer* data);
 typedef RGFW_bool (*RGFW_window_isHidden_ptr)(RGFW_window* win);
 typedef RGFW_bool (*RGFW_window_isMinimized_ptr)(RGFW_window* win);
@@ -16321,7 +16347,7 @@ void RGFW_window_moveMouse(RGFW_window* win, i32 x, i32 y) { RGFW_api.window_mov
 void RGFW_window_hide(RGFW_window* win) { RGFW_api.window_hide(win); }
 void RGFW_window_show(RGFW_window* win) { RGFW_api.window_show(win); }
 void RGFW_window_flash(RGFW_window* win, RGFW_flashRequest request) { RGFW_api.window_flash(win, request); }
-RGFW_bool RGFW_readClipboardPtr(u8* buffer, size_t capacity, RGFW_dataTransfer* data) { return RGFW_api.readClipboardPtr(buffer, capacity, data); }
+RGFW_bool RGFW_readClipboardPtr(RGFW_dataTransferType requestedType, u8* buffer, size_t capacity, RGFW_dataTransfer* data) { return RGFW_api.readClipboardPtr(requestedType, buffer, capacity, data); }
 RGFW_bool RGFW_writeClipboard(const RGFW_dataTransfer* data) { return RGFW_api.writeClipboard(data); }
 RGFW_bool RGFW_window_isHidden(RGFW_window* win) { return RGFW_api.window_isHidden(win); }
 RGFW_bool RGFW_window_isMinimized(RGFW_window* win) { return RGFW_api.window_isMinimized(win); }
